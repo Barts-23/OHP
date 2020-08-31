@@ -4,8 +4,8 @@
 # Modified by iamBARTX™️
 
 # Install Updates
+yum install wget -y
 yum update -y
-
 yum install epel-release -y
 
 #Install Needed Sevices
