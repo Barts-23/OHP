@@ -7,7 +7,7 @@
 apt update -y 
 
 #Install Needed Sevices
-apt install squid dropbear zip unzip screen -y
+apt install curl squid dropbear zip unzip screen -y
 
 #Create Squid.conf
 cat <<EOF> /etc/squid/squid.conf
