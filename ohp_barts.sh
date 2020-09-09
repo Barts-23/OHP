@@ -1,19 +1,18 @@
 #!/bin/bash
-# CentOS 7 or 8
-# OPENHTTP PUNCHER TOOL SCRIPT
+# Debian and Ubuntu
+# OPENHTTP PUNCHER TOOL SCRIPT by lfasmpao
 # Modified by iamBARTX™️
 
 # Install Updates
-yum update -y
-yum install epel-release -y
+apt update -y 
 
 #Install Needed Sevices
-yum --enablerepo=epel install squid dropbear zip unzip screen -y
+apt install squid dropbear zip unzip screen -y
 
 #Create Squid.conf
 cat <<EOF> /etc/squid/squid.conf
 http_access allow all
-http_port 127.0.0.1:25100
+http_port 127.0.0.1:8089
 acl barts src 0.0.0.0/0.0.0.0
 no_cache deny barts
 dns_nameservers 1.1.1.1 1.0.0.1
@@ -22,8 +21,20 @@ EOF
 
 # Create OHP Banner
 cat <<'EOF2'> /etc/banner
-BartX GTM No Load and With Promi Server
+BartX GTM No Load or With Promo
 EOF2
+
+# Create Dropbear
+cat <<'EOF3' > /etc/default/dropbear
+NO_START=0
+DROPBEAR_PORT=110
+DROPBEAR_EXTRA_ARGS=""
+DROPBEAR_BANNER="/etc/banner"
+DROPBEAR_RSAKEY="/etc/dropbear/dropbear_rsa_host_key"
+DROPBEAR_DSSKEY="/etc/dropbear/dropbear_dss_host_key"
+DROPBEAR_ECDSAKEY="/etc/dropbear/dropbear_ecdsa_host_key"
+DROPBEAR_RECEIVE_WINDOW=65536
+EOF3
 
 #Setup Dropbear
 echo "[Unit]
@@ -33,12 +44,12 @@ Wants=dropbear-keygen.service
 After=network.target
 
 [Service]
-ExecStart=/usr/sbin/dropbear -E -F -p 127.0.0.1:25102 -b /etc/banner
+ExecStart=/usr/sbin/dropbear -E -F -p 127.0.0.1:110 -b /etc/banner
 
 [Install]
-WantedBy=multi-user.target" > /lib/systemd/system/dropbear.service
+WantedBy=multi-user.target" > /etc/default/dropbear
 
-chmod +x /lib/systemd/system/dropbear.service
+chmod +x /etc/default/dropbear
 
 # Restart Dropbear
 systemctl daemon-reload && systemctl restart dropbear
@@ -55,7 +66,7 @@ chmod +x ohpserver
 
 screen -S barts -dm bash -c "./ohpserver -port 687 -proxy 127.0.0.1:25100 -tunnel 127.0.0.1:110"
 
-screen -r barts
+#screen -r barts
 
 # Adding user/pass
 echo '/bin/false' >> /etc/shells
@@ -64,15 +75,13 @@ User='Bartx';
 Pass='Bartx';
 useradd -m -s /bin/false $User && echo -e "$Pass\n$Pass\n" | passwd $User
 
-echo -e "" 
 echo -e "###############################
 ##                           ##
 ##   OPENHTTP PUNCHER TOOL   ##
 ##                           ##
 ##   Modified by iamBARTX™️   ##
 ##                           ##
-###############################"
-echo -e ""
+###############################
 
-rm -f ohp_barts.sh*
+rm -f ohp_barts*
 exit 1
