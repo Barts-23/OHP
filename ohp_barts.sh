@@ -52,7 +52,7 @@ WantedBy=multi-user.target" > /etc/default/dropbear
 chmod +x /etc/default/dropbear
 
 # Restart Dropbear
-systemctl daemon-reload && systemctl restart dropbear
+systemctl daemon-reload && service dropbear restart
 
 #Restart Squid Proxy
 service squid restart
@@ -74,14 +74,6 @@ echo '/bin/false' >> /etc/shells
 User='Bartx';
 Pass='Bartx';
 useradd -m -s /bin/false $User && echo -e "$Pass\n$Pass\n" | passwd $User
-
-echo -e "###############################
-##                           ##
-##   OPENHTTP PUNCHER TOOL   ##
-##                           ##
-##   Modified by iamBARTX™️   ##
-##                           ##
-###############################
 
 rm -f ohp_barts*
 exit 1
