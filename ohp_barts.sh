@@ -64,7 +64,7 @@ unzip -qq ohp.zip && rm -f ohp.zip
 
 chmod +x ohpserver
 
-screen -S barts -dm bash -c "./ohpserver -port 687 -proxy 127.0.0.1:25100 -tunnel 127.0.0.1:110"
+screen -S barts -dm bash -c "./ohpserver -port 8088 -proxy 127.0.0.1:8089 -tunnel 127.0.0.1:110"
 
 #screen -r barts
 
